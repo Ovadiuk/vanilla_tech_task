@@ -1,15 +1,17 @@
 package amazon.pages;
 
+import amazon.utils.Utils;
 import amazon.config.EnvFactory;
-import amazon.pages.components.HamburgerMenuElement;
 
+import amazon.pages.components.HeaderElement;
+import amazon.pages.components.HeaderResultElement;
+import amazon.pages.components.LeftFilterPanelElement;
+import amazon.pages.components.ResultsElement;
 import com.typesafe.config.Config;
-
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import static org.awaitility.Awaitility.*;
+
 
 public class HomePage extends BasePage{
     private static Config config = EnvFactory.getInstance().getConfig();
@@ -26,9 +28,21 @@ public class HomePage extends BasePage{
         return this;
     }
 
-    public HamburgerMenuElement openHamburgerMenu(){
-        driver.findElement(By.id("nav-hamburger-menu")).click();
-        waitForElemetIsDisplay(driver.findElement(By.id("hmenu-canvas")));
-        return new HamburgerMenuElement(driver);
+    public HeaderElement getHeaderElement(){
+        return new HeaderElement(driver);
     }
+
+    public LeftFilterPanelElement getLeftPanel(){
+        Utils.waitForElemetIsDisplay(driver.findElement(By.id("s-refinements")));
+        return new LeftFilterPanelElement(driver);
+    }
+
+    public ResultsElement getResultsElement(){
+        return new ResultsElement(driver);
+    }
+
+    public HeaderResultElement getHeaderResultElement(){
+        return new HeaderResultElement(driver);
+    }
+
 }

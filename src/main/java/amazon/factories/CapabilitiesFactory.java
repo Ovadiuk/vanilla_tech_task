@@ -3,6 +3,9 @@ package amazon.factories;
 import amazon.choices.Browser;
 import amazon.config.EnvFactory;
 import com.typesafe.config.Config;
+
+import java.time.Duration;
+
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -53,6 +56,7 @@ public class CapabilitiesFactory {
         chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         chromeOptions.addArguments("--enable-javascript");
         chromeOptions.addArguments("--disable-notifications");
+        chromeOptions.setImplicitWaitTimeout(Duration.ofSeconds(10));
 
         Map<String, Object> prefs = new Hashtable<String, Object>();
         prefs.put("plugins.always_open_pdf_externally", true);
