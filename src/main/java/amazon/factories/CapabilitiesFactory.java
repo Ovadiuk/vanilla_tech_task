@@ -1,10 +1,13 @@
 package amazon.factories;
 
 import amazon.choices.Browser;
+import amazon.choices.Host;
 import amazon.config.EnvFactory;
 import com.typesafe.config.Config;
 
 import java.time.Duration;
+
+import java.util.HashMap;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.PageLoadStrategy;
@@ -30,6 +33,11 @@ public class CapabilitiesFactory {
     private static final String SELENIUM_LOG_LEVEL = config.getString("SELENIUM_LOG_LEVEL");
     private static final String DOWNLOADS_DIR = config.getString("DOWNLOADS_DIR");
 
+    private static final String SAUCE_USERNAME = config.getString("SAUCE_USERNAME");
+    private static final String SAUCE_ACCESS_KEY = config.getString("SAUCE_ACCESS_KEY");
+    private static final String PLATFORM_NAME = config.getString("PLATFORM_NAME");
+
+    private static final String HOST = config.getString("HOST");
     public static Capabilities getCapabilities(Browser browser) {
         switch (browser) {
             case CHROME:
@@ -68,6 +76,17 @@ public class CapabilitiesFactory {
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.parse(SELENIUM_LOG_LEVEL));
         chromeOptions.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        if(HOST.equals("host.saucelabs")) {
+            chromeOptions.setPlatformName(PLATFORM_NAME);
+            chromeOptions.setBrowserVersion("latest");
+
+            Map<String, Object> sauceOptions = new HashMap<>();
+            sauceOptions.put("username", SAUCE_USERNAME);
+            sauceOptions.put("accessKey", SAUCE_ACCESS_KEY);
+
+            chromeOptions.setCapability("sauce:options", sauceOptions);
+        }
         return chromeOptions;
     }
 

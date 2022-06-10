@@ -32,6 +32,8 @@ public class DriverFactory {
                 // fall through - same options apply.
             case DOCKER_SELENIUM_GRID:
                 return getRemoteWebDriver();
+            case SAUCE_LAB:
+                return getRemoteWebDriver();
             default:
                 throw new IllegalStateException(String.format("%s is not a valid HOST choice. Pick your HOST from %s.", HOST, java.util.Arrays.asList(Host.values())));
         }
@@ -61,7 +63,7 @@ public class DriverFactory {
     private static WebDriver getRemoteWebDriver() {
         switch (BROWSER) {
             case CHROME:
-                // fall - through. Same method for all browsers.
+                return new RemoteWebDriver(URLFactory.getHostURL(HOST), CapabilitiesFactory.getCapabilities(BROWSER));
             case FIREFOX:
                 // fall - through. Same method for all browsers.
             case EDGE:
